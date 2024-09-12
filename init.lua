@@ -12,6 +12,11 @@ vim.opt.termguicolors = true        -- Enable true colors in terminal
 vim.opt.splitright = true           -- Split vertical windows to the right
 vim.opt.splitbelow = true           -- Split horizontal windows below
 
+
+vim.g.have_nerd_font = true         -- Set to true if you have a Nerd Font installed and selected in the terminal
+vim.opt.undofile = true             -- Save undo history
+
+
 -- Initialize lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
