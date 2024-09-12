@@ -1,61 +1,30 @@
--- Basic Neovim settings
-vim.opt.number = true               -- Show line numbers
-vim.opt.relativenumber = true       -- Show relative line numbers
-vim.opt.mouse = 'a'                 -- Enable mouse support
-vim.opt.clipboard = 'unnamedplus'   -- Use system clipboard
-vim.opt.tabstop = 4                 -- Number of spaces tabs count for
-vim.opt.shiftwidth = 4              -- Number of spaces for auto-indentation
-vim.opt.expandtab = true            -- Convert tabs to spaces
-vim.opt.incsearch = true            -- Show search matches as you type
-vim.opt.hlsearch = true             -- Highlight search results
-vim.opt.ignorecase = true           -- Ignore case when searching
-vim.opt.smartcase = true            -- Override ignorecase if search contains capitals
-vim.opt.splitright = true           -- Open vertical splits to the right
-vim.opt.splitbelow = true           -- Open horizontal splits below
+-- Set basic options
+vim.opt.number = true
+vim.opt.relativenumber = true
+vim.opt.mouse = 'a'
+vim.opt.clipboard = 'unnamedplus'
+vim.opt.tabstop = 4
+vim.opt.shiftwidth = 4
+vim.opt.expandtab = true
 
--- Key mappings
-vim.api.nvim_set_keymap('n', '<C-s>', ':w<CR>', { noremap = true, silent = true })  -- Ctrl+S to save
+-- Initialize lazy.nvim
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system({
+    "git",
+    "clone",
+    "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable", -- latest stable release
+    lazypath,
+  })
+end
+vim.opt.rtp:prepend(lazypath)
 
--- Set color scheme (you can change this to any other theme)
-vim.cmd('colorscheme desert')
-
--- Load packer.nvim for plugin management
-vim.cmd [[packadd packer.nvim]]
-
--- Plugin management using packer.nvim
-require('packer').startup(function()
-    -- Packer can manage itself
-    use 'wbthomason/packer.nvim'
-
-    -- Fuzzy file finder
-    use {
-        'junegunn/fzf',
-        run = function() vim.fn['fzf#install']() end
-    }
-
-    -- Commenting plugin
-    use 'tpope/vim-commentary'
-
-    -- Optional: Status line plugin
-    use {
-        'hoob3rt/lualine.nvim',
-        requires = { 'kyazdani42/nvim-web-devicons', opt = true }
-    }
-
-    -- Optional: Tree-sitter for better syntax highlighting
-    use {
-        'nvim-treesitter/nvim-treesitter',
-        run = ':TSUpdate'
-    }
-
-    -- Optional: LSP support for language servers
-    use 'neovim/nvim-lspconfig'
-end)
-
--- Example of enabling LSP (Language Server Protocol) for Python
--- You can configure more LSP servers here
-local lspconfig = require('lspconfig')
-lspconfig.pyright.setup{}
-
--- Automatically install missing plugins on startup
-vim.cmd [[autocmd BufWritePost init.lua source <afile> | PackerSync]]
+-- Plugin configuration
+require("lazy").setup({
+  -- Add plugins here
+  { "junegunn/fzf" },          -- Fuzzy file finder
+  { "tpope/vim-commentary" },  -- Commenting plugin
+  { "nvim-lualine/lualine.nvim" }, -- Status line
+})
